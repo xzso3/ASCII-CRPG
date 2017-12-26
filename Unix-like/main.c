@@ -33,18 +33,17 @@
  * 
  */
 
-int menuScenario();
+unsigned int _sys_showScenario(char scenarioType[32]);
 int _sys_keyboardEvent();
 int _tmp_testCursesInit();
 
 
-
-
+// Main entrance.
 int main(){
     // Clear the console screen.
 
     // Display the menu scenario.
-    //menuScenario();
+    // _sys_showScenario("menu");
     _tmp_testCursesInit();
     
     /*
@@ -59,27 +58,9 @@ int main(){
 }
 
 
-int menuScenario(){
-    int FUNC_RETURN_VALUE = 0x00;
-    printf("-----------------------------------------------------\n");
-    printf("                                                     \n");
-    printf("        JUST A SIMPLE CLANG ROLE-PLAYING-GAME        \n");
-    printf("                                                     \n");
-    printf("                   # GAME_TITLE                      \n");
-    printf("                                                     \n");
-    printf("                # ASCII_TITLE_IMAGE                  \n");
-    printf("                                                     \n");
-    printf("-----------------------------------------------------\n");
-    printf("                                                     \n\n");
-    printf("          *-------------------------------*\n");
-    printf("          |                               |\n");
-    printf("          |          START  GAME          |\n");
-    printf("          |                               |\n");
-    printf("          |          LOAD   GAME          |\n");
-    printf("          |                               |\n");
-    printf("          |          EXIT   GAME          |\n");
-    printf("          |                               |\n");
-    printf("          *-------------------------------*\n");
+unsigned int _sys_showScenario(char scenarioType[32]){
+    unsigned int FUNC_RETURN_VALUE = 0x00;
+
     return FUNC_RETURN_VALUE;
 }
 
@@ -123,6 +104,7 @@ int _tmp_testCursesInit(){
         mvwprintw(_tmp_wInput, 3, 4, "You pressed [KEY_CODE: 0x%02x]!", _tmp_cGet);
         wrefresh(_tmp_wInput);
 
+        attron(A_REVERSE);
         switch(_tmp_cGet){
             case _KEY_MBP_UP:
                 mvwprintw(_tmp_wInput, 4, 4, "YOU GO AHEAD ONE STEP!     ");
@@ -144,6 +126,7 @@ int _tmp_testCursesInit(){
                 wrefresh(_tmp_wInput);
                 break;
         }
+        attroff(A_REVERSE);
 
         if(_tmp_cGet == 'q' || _tmp_cGet == 'Q'){
             mvwprintw(_tmp_wInput, 4, 4, "SAMPLE PROGRAM EXITED        ");
