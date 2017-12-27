@@ -4,6 +4,9 @@
 
 /*
  *    ASCII CRPG - IO Header
+ *
+ *    Current Version : For Windows    
+ *
  *    -------------------------------------------------------
  *    Author:           Renjie Zhu
  *    Student ID:       f17011135 

@@ -11,6 +11,9 @@
 
 /*
  *    ASCII CRPG - Main Program Entrance
+ *
+ *    Current Version : For Unix-like OS    
+ *
  *    -------------------------------------------------------
  *    Author:           Renjie Zhu
  *    Student ID:       f17011135 
