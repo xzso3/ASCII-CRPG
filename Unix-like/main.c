@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <ncurses.h>            // Library ncurses (For Unix-like OS)
 //#include <curses.h>           // Library PDcurses (For Windows OS)
+#include "scenario.h"
+#include "io.h"
+
 #define _KEY_ACTION_ESC 0x1B
 #define _KEY_ACTION_UP 0x77
 #define _KEY_ACTION_DOWN 0x73
