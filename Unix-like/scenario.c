@@ -1,4 +1,5 @@
 #include "scenario.h"
+#include <time.h>
 #include <ncurses.h>            // Library ncurses (For Unix-like OS)
 //#include "curses.h"           // Library PDcurses (For Windows OS)
 
@@ -25,13 +26,39 @@
  * 
  */
 
-unsigned int _sys_showScenario(int scenarioType){
+// Curses screen initialize function
+unsigned int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
+    unsigned int FUNC_RETURN_VALUE = 0x01;
+
+    // Initialize curses
+    initscr();
+    noecho();
+    cbreak();
+    start_color();
+
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);   
+
+    // get screen spec
+    getmaxyx(stdscr, *_G_SYS_RES_Y, *_G_SYS_RES_X);
+    attron(COLOR_PAIR(1));
+
+    mvwprintw(stdscr, 1, 3, "[DEBUG] Console Res: %dx%d", *_G_SYS_RES_X, *_G_SYS_RES_Y);
+    attroff(COLOR_PAIR(1));
+    
+    return FUNC_RETURN_VALUE;
+}
+ss
+unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
     unsigned int FUNC_RETURN_VALUE = 0x01;
     switch(scenarioType){
         case 0:
-            _tmp_testCursesInit();
+            _sys_mainScenario();            
             break;
         
+        case 666:
+            _tmp_testCursesInit(_G_SYS_RES_Y, _G_SYS_RES_X);
+            break;
+
         default:
             FUNC_RETURN_VALUE = 0x00;
             break;
@@ -40,20 +67,37 @@ unsigned int _sys_showScenario(int scenarioType){
     return FUNC_RETURN_VALUE;
 }
 
-unsigned int _tmp_testCursesInit(){
+unsigned int _sys_mainScenario(){
+    unsigned int FUNC_RETURN_VALUE = 0x01;
+    char* titleASCII[5];
+    titleASCII[0] = "     _    ____   ____ ___ ___       ____ ____  ____   ____ ";
+    titleASCII[1] = "    / \\  / ___| / ___|_ _|_ _|     / ___|  _ \\|  _ \\ / ___|";
+    titleASCII[2] = "   / _ \\ \\___ \\| |    | | | |     | |   | |_) | |_) | |  _ ";
+    titleASCII[3] = "  / ___ \\ ___) | |___ | | | |     | |___|  _ <|  __/| |_| |";
+    titleASCII[4] = " /_/   \\_\\____/ \\____|___|___|     \\____|_| \\_\\_|    \\____|";
+
+    int i;
+    for(i=0; i<5; i++){
+        mvwprintw(stdscr, i+3, 5, titleASCII[i]);
+        wrefresh(stdscr);
+        clock_t curTime = clock();
+        mvwprintw(stdscr, i+8, 3, "[DEBUG] curTime: %ld", curTime);
+        wrefresh(stdscr);
+        while (clock() < curTime + 600000);
+    }
+        
+    
+    return FUNC_RETURN_VALUE;
+}
+
+
+unsigned int _tmp_testCursesInit(int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
 
     unsigned int FUNC_RETURN_VALUE = 0x00;
     
-    // Initialize curses
-    initscr();
-    noecho();
-    cbreak();
-    
-    // get screen spec
-    int resY, resX;
-    getmaxyx(stdscr, resY, resX);
-
-     mvwprintw(stdscr, 2, 5, "Console Res: %dx%d", resX, resY);
+    int resX = *_G_SYS_RES_X,
+        resY = *_G_SYS_RES_Y;
+       
 
     // create a window for input
     WINDOW* _tmp_wInput = newwin(7, resX-12, resY-9, 5);
