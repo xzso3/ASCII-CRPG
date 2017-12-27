@@ -1,3 +1,4 @@
+#include <time.h>
 #include "scenario.h"
 //#include <ncurses.h>            // Library ncurses (For Unix-like OS)
 #include "curses.h"           // Library PDcurses (For Windows OS)
@@ -51,7 +52,7 @@ unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_
     unsigned int FUNC_RETURN_VALUE = 0x01;
     switch(scenarioType){
         case 0:
-            //_tmp_testCursesInit();
+            _sys_mainScenario();            
             break;
         
         case 666:
@@ -68,7 +69,21 @@ unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_
 
 unsigned int _sys_mainScenario(){
     unsigned int FUNC_RETURN_VALUE = 0x01;
-    
+    char* titleASCII[5];
+    titleASCII[0] = "     _    ____   ____ ___ ___       ____ ____  ____   ____ ";
+    titleASCII[1] = "    / \\  / ___| / ___|_ _|_ _|     / ___|  _ \\|  _ \\ / ___|";
+    titleASCII[2] = "   / _ \\ \\___ \\| |    | | | |     | |   | |_) | |_) | |  _ ";
+    titleASCII[3] = "  / ___ \\ ___) | |___ | | | |     | |___|  _ <|  __/| |_| |";
+    titleASCII[4] = " /_/   \\_\\____/ \\____|___|___|     \\____|_| \\_\\_|    \\____|";
+
+    int i;
+    for(i=0; i<5; i++){
+        mvwprintw(stdscr, i+3, 5, titleASCII[i]);
+        wrefresh(stdscr);
+        clock_t curTime = clock();
+        while (clock() < curTime + 600);
+    }
+        
     
     return FUNC_RETURN_VALUE;
 }
@@ -90,6 +105,7 @@ unsigned int _tmp_testCursesInit(int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
 
     keypad(_tmp_wInput, 1);
     mvwprintw(_tmp_wInput, 0, 3, "[System]");
+    mvwprintw(_tmp_wInput, 2, 4, "Debug Mode Actived!");
     wrefresh(_tmp_wInput);
     mvwprintw(_tmp_wInput, 5, 41, "[Press Enter to Continue]");
     wrefresh(_tmp_wInput);

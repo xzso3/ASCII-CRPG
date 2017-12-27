@@ -4,6 +4,7 @@
 #define _KEY_MBP_UP 0x103
 #define _KEY_MBP_LEFT 0x104
 #define _KEY_MBP_RIGHT 0x105
+#include <time.h>
 
 /*
  *    ASCII CRPG - Scenario Header
