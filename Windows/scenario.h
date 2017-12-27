@@ -28,7 +28,10 @@
  * 
  */
 
-unsigned int _sys_showScenario(int scenarioType);
+unsigned int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
+unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
+unsigned int _sys_mainScenario();
 unsigned int _tmp_testCursesInit();
+
 
 #endif
