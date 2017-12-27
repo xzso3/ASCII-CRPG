@@ -1,17 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "io.h"
-#include "scenario.h"
-#define _KEY_ACTION_ESC 0x1B
-#define _KEY_ACTION_UP 0x77
-#define _KEY_ACTION_DOWN 0x73
-#define _KEY_ACTION_LEFT 0x61
-#define _KEY_ACTION_RIGHT 0x64
-#define _KEY_ACTION_ENTER 0x0D
-
+#ifndef SCENARIO_H
+#define SCENARIO_H
+#define _KEY_MBP_DOWN 0x102
+#define _KEY_MBP_UP 0x103
+#define _KEY_MBP_LEFT 0x104
+#define _KEY_MBP_RIGHT 0x105
 
 /*
- *    ASCII CRPG - Main Program Entrance
+ *    ASCII CRPG - Scenario Header
  *    -------------------------------------------------------
  *    Author:           Renjie Zhu
  *    Student ID:       f17011135 
@@ -30,13 +25,7 @@
  * 
  */
 
+unsigned int _sys_showScenario(int scenarioType);
+unsigned int _tmp_testCursesInit();
 
-int main(){
-    // Clear the console screen.
-
-    // Display the menu scenario.
-    _sys_showScenario(0);
-
-    return 0;
-}
-
+#endif
