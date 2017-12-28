@@ -3,7 +3,7 @@
 //#include "curses.h"           // Library PDcurses (For Windows OS)
 
 /*
- *    ASCII CRPG - Scenario Program Entrance
+ *    ASCII CAVG - Scenario Program Entrance
  *
  *    Current Version : For Unix-like OS    
  *

@@ -10,7 +10,7 @@
 #define _KEY_ACTION_ENTER 0x0D
 
 /*
- *    ASCII CRPG - Main Program Entrance
+ *    ASCII CAVG - Main Program Entrance
  *
  *    Current Version : For Unix-like OS    
  *

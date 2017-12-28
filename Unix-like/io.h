@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 /*
- *    ASCII CRPG - IO Header
+ *    ASCII CAVG - IO Header
  *
  *    Current Version : For Unix-like OS    
  *

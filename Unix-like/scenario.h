@@ -6,7 +6,7 @@
 #define _KEY_MBP_RIGHT 0x105
 
 /*
- *    ASCII CRPG - Scenario Header
+ *    ASCII CAVG - Scenario Header
  *
  *    Current Version : For Unix-like OS    
  *
