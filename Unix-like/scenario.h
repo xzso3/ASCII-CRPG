@@ -4,6 +4,7 @@
 #define _KEY_MBP_UP 0x103
 #define _KEY_MBP_LEFT 0x104
 #define _KEY_MBP_RIGHT 0x105
+#include <time.h>
 
 /*
  *    ASCII CAVG - Scenario Header
@@ -28,7 +29,9 @@
  * 
  */
 
-unsigned int _sys_showScenario(int scenarioType);
+unsigned int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
+unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
+unsigned int _sys_mainScenario();
 unsigned int _tmp_testCursesInit();
 
 #endif

@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>            // Library ncurses (For Unix-like OS)
-//#include <curses.h>           // Library PDcurses (For Windows OS)
+//#include <curses.h>         // Library PDcurses (For Windows OS)
+#include "scenario.h"  
+#include "io.h"
+
 #define _KEY_ACTION_ESC 0x1B
 #define _KEY_ACTION_UP 0x77
 #define _KEY_ACTION_DOWN 0x73
@@ -36,7 +39,10 @@
 int main(){
 
     // Display the menu scenario.
-    _sys_showScenario(0);
+    int _sys_resY, _sys_resX;
+    _sys_initialize(&_sys_resY, &_sys_resX);
+    _sys_showScenario(0, &_sys_resY, &_sys_resX);
+    _sys_showScenario(666, &_sys_resY, &_sys_resX);
     
 
     return 0;
