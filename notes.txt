@@ -1,3 +1,4 @@
 2017/12/27
 为了让标题有动画效果 我想尝试通过Sleep函数来实现效果 发现windows.h和pdcurses的库有冲突 有常量重复定义了
 通过time.h获取当前时间配合循环来实现一个小的sleep效果
+unix-like下time.h得clock函数和windows下不同 windows返回毫秒 unix-like返回微秒

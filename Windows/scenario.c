@@ -4,7 +4,7 @@
 #include "curses.h"           // Library PDcurses (For Windows OS)
 
 /*
- *    ASCII CRPG - Scenario Program Entrance
+ *    ASCII CAVG - Scenario Program Entrance
  *
  *    Current Version : For Windows    
  *
@@ -55,6 +55,10 @@ unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_
             _sys_mainScenario();            
             break;
         
+        case 665:
+            _tmp_testRefreshRate();
+            break;
+
         case 666:
             _tmp_testCursesInit(_G_SYS_RES_Y, _G_SYS_RES_X);
             break;

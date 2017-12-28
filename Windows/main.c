@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "io.h"
 #include "scenario.h"
 #define _KEY_ACTION_ESC 0x1B
@@ -11,7 +12,7 @@
 
 
 /*
- *    ASCII CRPG - Main Program Entrance
+ *    ASCII CAVG - Main Program Entrance
  *
  *    Current Version : For Windows    
  *
