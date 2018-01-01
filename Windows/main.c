@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include "io.h"
 #include "scenario.h"
 #define _KEY_ACTION_ESC 0x1B
@@ -40,8 +39,9 @@ int main(){
     // Display the menu scenario.
     int _sys_resY, _sys_resX;
     _sys_initialize(&_sys_resY, &_sys_resX);
-    _sys_showScenario(0, &_sys_resY, &_sys_resX);
-    _sys_showScenario(666, &_sys_resY, &_sys_resX);
+    _sys_showScenario(0, _sys_resY, _sys_resX);
+    _sys_showScenario(1, _sys_resY, _sys_resX);
+
 
     return 0;
 }

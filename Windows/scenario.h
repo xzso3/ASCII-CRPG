@@ -1,10 +1,5 @@
 #ifndef SCENARIO_H
 #define SCENARIO_H
-#define _KEY_MBP_DOWN 0x102
-#define _KEY_MBP_UP 0x103
-#define _KEY_MBP_LEFT 0x104
-#define _KEY_MBP_RIGHT 0x105
-#include <time.h>
 
 /*
  *    ASCII CAVG - Scenario Header
@@ -29,9 +24,30 @@
  * 
  */
 
-unsigned int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
-unsigned int _sys_showScenario(int scenarioType, int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
-unsigned int _sys_mainScenario();
-unsigned int _tmp_testCursesInit();
+/* System Functions */
+int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
+int _sys_showScenario(int scenarioType, int _G_SYS_RES_Y, int _G_SYS_RES_X);
+int _sys_mainScenario();
+int _sys_canvasPrint(char** canvas);
+
+/* Scenario Functions */
+int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X);
+int _scene_titleStart();
+int _scene_titleLoad();
+int _scene_titleExit();
+int _scene_chapterTitleDisplay(int chapterNumber);
+int _scene_chapterContentDisplay(int chapterNumber, int chapterProgress);
+
+/*
+	ONE CHARPTER CHARTFLOW
+
+	SHOW THE CHAPTER TITLE
+	>>
+	PLAY THE CONTENT
+*/
+
+
+/* Temporary Functions */
+int _tmp_testCursesInit();
 
 #endif
