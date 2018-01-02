@@ -40,6 +40,7 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X);
 int _scene_titleStart();
 int _scene_titleLoad();
 int _scene_titleExit(int _G_SYS_RES_Y, int _G_SYS_RES_X);
+int _scene_controller(int chapterNumber, int chapterProgress);
 int _scene_chapterTitleDisplay(int chapterNumber);
 int _scene_chapterContentDisplay(int chapterNumber, int chapterProgress);
 

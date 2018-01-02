@@ -38,6 +38,9 @@
 /// </Summary>
 
 // Curses screen initialize function
+
+int _G_resX, _G_resY;
+
 int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
 
@@ -48,13 +51,19 @@ int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X){
     curs_set(0);
     start_color();
 
-    init_pair(1, COLOR_BLACK, COLOR_WHITE);   
+
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+    init_pair(2, COLOR_WHITE, COLOR_CYAN);
 
     // get screen spec
     getmaxyx(stdscr, *_G_SYS_RES_Y, *_G_SYS_RES_X);
+    _G_resX = *_G_SYS_RES_X;
+    _G_resY = *_G_SYS_RES_Y;
+    /* Debug codes
     attron(COLOR_PAIR(1));
     mvwprintw(stdscr, 1, 3, "[DEBUG] Console Res: %dx%d", *_G_SYS_RES_X, *_G_SYS_RES_Y);
     attroff(COLOR_PAIR(1));
+    */
     
     return FUNC_RETURN_VALUE;
 }
@@ -108,10 +117,10 @@ int _sys_mainScenario(){
 
     for(j = 0; j < wcLen * 2; j++){
         if(j % 2 == 0){
-            move(11, j + 5);
+            move(11, j + 4);
             addnwstr(tmp + j / 2, 1);
         }else{
-            move(11, j + 5);
+            move(11, j + 4);
             addstr(" ");
         }
     }
@@ -129,12 +138,25 @@ int _sys_canvasPrint(char** canvas){
     return FUNC_RETURN_VALUE;
 }
 
+int _sys_sleep(int sleepTime){
+    int FUNC_RETURN_VALUE = 0x01;
+    if(sleepTime > 0){
+        clock_t curTime = clock();
+        while (clock() < curTime + sleepTime); 
+    }else{
+        FUNC_RETURN_VALUE = 0x00;
+    }
+
+    return FUNC_RETURN_VALUE;
+}
+
 /// <Summary>
 /// Scenario Function
 /// </Summary>
 
 int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
+    int SPC = 0x20;
     int keySelection, hlSelection = 0; // hl means highlighted
     wchar_t* menuSelection[3] = {L"开 始 游 戏 ", L"读 取 游 戏 ", L"退 出 游 戏 "};
     
@@ -144,19 +166,25 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
        
 
     // create a window for input
-    WINDOW* titleSelector = newwin(7, resX-12, resY-9, 7);
-    box(titleSelector, 0, 0);
+    WINDOW* titleSelector = newwin(12, resX, resY-12, 0);
+    box(titleSelector, SPC, SPC);
+    wborder(titleSelector, SPC, SPC, SPC, SPC, SPC, SPC, SPC, SPC);
     keypad(titleSelector, 1);
+    wbkgd(titleSelector, COLOR_PAIR(2));
+
 
     // selector loop
     while(1){
         int i;
         for(i = 0; i < 3; i++){
             if(i == hlSelection)      wattron(titleSelector, A_REVERSE);
-            mvwaddwstr(titleSelector, i+2, resX/2-12, menuSelection[i]);
+            mvwaddwstr(titleSelector, i*2+2, 4, menuSelection[i]);
             wrefresh(titleSelector);
             wattroff(titleSelector, A_REVERSE);
         }
+
+        mvwaddstr(titleSelector, i*2+4, 4, "Copyright Const 2018. All Rights Reserved.");
+        wrefresh(titleSelector);
 
         keySelection = wgetch(titleSelector);
 
@@ -173,20 +201,20 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
                 break;
         }
 
-        if(keySelection == 0x0a)
+        if(keySelection == 0x0a || keySelection == 0x1cb)
             break;
 
     }
 
     switch(hlSelection){
         case 0:
-            mvwprintw(titleSelector, 0, 2, " GAME Loading ... ");
+            mvwprintw(titleSelector, 0, 2, "  GAME Loading ... ");
             wrefresh(titleSelector);
             _scene_titleStart();
             break;
 
         case 1:
-            mvwprintw(titleSelector, 0, 2, " SAV Loading ... ");
+            mvwprintw(titleSelector, 0, 2, "  SAV Loading ... ");
             wrefresh(titleSelector);
             _scene_titleLoad();
             break;
@@ -202,8 +230,10 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
 int _scene_titleStart(){
     int FUNC_RETURN_VALUE = 0x01;
     clear();
-    getch();
-    endwin();
+    _sys_sleep(1000);
+    wrefresh(stdscr);
+    _sys_sleep(1000);
+    _scene_controller(0, 0); // Start from the begining.
     return FUNC_RETURN_VALUE;
 }
 
@@ -226,11 +256,52 @@ int _scene_titleExit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     return FUNC_RETURN_VALUE;
 }
 
+int _scene_controller(int chapterNumber, int chapterProgress){
+    int FUNC_RETURN_VALUE = 0x01;
+    _scene_chapterTitleDisplay(0);
+
+    return FUNC_RETURN_VALUE;
+}
+
+int _scene_chapterTitleDisplay(int chapterNumber){
+    int FUNC_RETURN_VALUE = 0x01;
+
+    int startPos[7] = {0, 5, 10, 16, 21, 27, 30};
+    wchar_t* chapterTitle = L"接诊电话|抢救现场|第一场手术|急转直下|第二场手术|爆发|归家";
+
+    move(_G_resY / 2 - 2, 5);
+    addnwstr(L"第", 1);
+    printw(" %c ", chapterNumber + 49);
+    addnwstr(L"章", 1);
+    wrefresh(stdscr);
+    _sys_sleep(1500);
+    int i = chapterNumber;
+    while(chapterTitle[i] != L'|'){
+        move(_G_resY / 2, 5 + i * 2);
+        addnwstr(chapterTitle + startPos[chapterNumber] + i, 1);
+        wrefresh(stdscr);
+        clock_t curTime = clock();
+        while (clock() < curTime + 500);
+        i++;
+    }
+
+    getch();
+    endwin();
+    return FUNC_RETURN_VALUE;
+}
+
+int _scene_chapterContentDisplay(int chapterNumber, int chapterProgress){
+    int FUNC_RETURN_VALUE = 0x01;
+
+
+    return FUNC_RETURN_VALUE;
+}
+
 /// <Summary>
 /// Temporary Function
 /// </Summary>
 
-// Debug Function 
+// Debug Function | Keyboard Testing
 int _tmp_testCursesInit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
 
     int FUNC_RETURN_VALUE = 0x00;
