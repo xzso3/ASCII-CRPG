@@ -1,4 +1,5 @@
 #include <time.h>
+#include <string.h>
 #include <wchar.h>
 #include "scenario.h"
 //#include <ncurses.h>            // Library ncurses (For Unix-like OS)
@@ -13,8 +14,13 @@
  *    Author:           Renjie Zhu
  *    Student ID:       f17011135 
  *    Test environment: 
+ *         Compiler:
  *         - Clang 6.0 i686-pc-windows-msvc (LLVM) Windows
  *         - CLang Apple LLVM version 9.0.0 macOS
+ *         Test OS Env:
+ *         - macOS 10.13.1 
+ *         - Windows 7 (x64) Utimate SP1 Build 7601
+ *         - Windows 10 Pro Version 1709 Build 16299.125
  *                      
  *    Adapted OS:       Universal
  *    -------------------------------------------------------
@@ -79,21 +85,39 @@ int _sys_showScenario(int scenarioType, int _G_SYS_RES_Y, int _G_SYS_RES_X){
 
 int _sys_mainScenario(){
     int FUNC_RETURN_VALUE = 0x01;
-    char* titleASCII[6];
-    titleASCII[0] = "     _    ____   ____ ___ ___       ____ ____  ____   ____ ";
-    titleASCII[1] = "    / \\  / ___| / ___|_ _|_ _|     / ___|  _ \\|  _ \\ / ___|";
-    titleASCII[2] = "   / _ \\ \\___ \\| |    | | | |     | |   | |_) | |_) | |  _ ";
-    titleASCII[3] = "  / ___ \\ ___) | |___ | | | |     | |___|  _ <|  __/| |_| |";
-    titleASCII[4] = " /_/   \\_\\____/ \\____|___|___|     \\____|_| \\_\\_|    \\____|";
+    char* titleASCII[7];
+    titleASCII[0] = " .d8888b.                    d8888   888     888    .d8888b.  ";
+    titleASCII[1] = "888    888                 d88P888   888     888   888    888 ";
+    titleASCII[2] = "888                       d88P 888   Y88b   d88P   888        ";
+    titleASCII[3] = "888          8888888     d88P  888    Y88b d88P    888  88888 ";
+    titleASCII[4] = "888    888              d88P   888     Y88o88P     888    888 ";
+    titleASCII[5] = "Y88b  d88P             d8888888888      Y888P      Y88b  d88P ";
+    titleASCII[6] = " \"Y8888P\"             d88P     888       Y8P        \"Y8888P88 ";
+
+    wchar_t* tmp = L"江德医院故事 ";
 
     int i;
-    for(i=0; i<5; i++){
-        mvwprintw(stdscr, i+3, 5, titleASCII[i]);
+    for(i=0; i<7; i++){
+        mvwprintw(stdscr, i+3, 4, titleASCII[i]);
         wrefresh(stdscr);
         clock_t curTime = clock();
         while (clock() < curTime + 150);
     }
-        
+
+    int j, wcLen = wcslen(tmp);
+
+    for(j = 0; j < wcLen * 2; j++){
+        if(j % 2 == 0){
+            move(11, j + 5);
+            addnwstr(tmp + j / 2, 1);
+        }else{
+            move(11, j + 5);
+            addstr(" ");
+        }
+    }
+
+    //mvwaddwstr(stdscr, 8, 5, tmp);
+    wrefresh(stdscr);    
     
     return FUNC_RETURN_VALUE;
 }
@@ -112,7 +136,7 @@ int _sys_canvasPrint(char** canvas){
 int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
     int keySelection, hlSelection = 0; // hl means highlighted
-    wchar_t* menuSelection[3] = {L"开 始 游 戏 ", L"读 取 游 戏 ", L"保 存 游 戏 "};
+    wchar_t* menuSelection[3] = {L"开 始 游 戏 ", L"读 取 游 戏 ", L"退 出 游 戏 "};
     
     // Set Window Spec
     int resX = _G_SYS_RES_X,
@@ -168,9 +192,7 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
             break;
 
         case 2:
-            mvwprintw(titleSelector, 0, 2, " Exiting ... ");
-            wrefresh(titleSelector);
-            _scene_titleExit();
+            _scene_titleExit(_G_SYS_RES_Y, _G_SYS_RES_X);
             break;
     }
 
@@ -179,6 +201,7 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
 
 int _scene_titleStart(){
     int FUNC_RETURN_VALUE = 0x01;
+    clear();
     getch();
     endwin();
     return FUNC_RETURN_VALUE;
@@ -186,14 +209,19 @@ int _scene_titleStart(){
 
 int _scene_titleLoad(){
     int FUNC_RETURN_VALUE = 0x01;
+    clear();
     getch();
     endwin();
     return FUNC_RETURN_VALUE;
 }
 
-int _scene_titleExit(){
+int _scene_titleExit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
-    getch();
+    char* caption = "Exiting...";
+    clear();
+    mvwprintw(stdscr, _G_SYS_RES_Y/2, (_G_SYS_RES_X - strlen(caption)) / 2, caption);
+    clock_t curTime = clock();
+    while (clock() < curTime + 1500) wrefresh(stdscr);
     endwin();
     return FUNC_RETURN_VALUE;
 }
@@ -202,6 +230,7 @@ int _scene_titleExit(){
 /// Temporary Function
 /// </Summary>
 
+// Debug Function 
 int _tmp_testCursesInit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
 
     int FUNC_RETURN_VALUE = 0x00;
@@ -238,22 +267,22 @@ int _tmp_testCursesInit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
         wrefresh(_tmp_wInput);
 
         switch(_tmp_cGet){
-            case _KEY_MBP_UP:
+            case KEY_UP:
                 mvwprintw(_tmp_wInput, 4, 4, "YOU GO AHEAD ONE STEP!     ");
                 wrefresh(_tmp_wInput);
                 break;
 
-            case _KEY_MBP_DOWN:
+            case KEY_DOWN:
                 mvwprintw(_tmp_wInput, 4, 4, "YOU GO DOWN ONE STEP!      ");
                 wrefresh(_tmp_wInput);
                 break;
 
-            case _KEY_MBP_RIGHT:
+            case KEY_RIGHT:
                 mvwprintw(_tmp_wInput, 4, 4, "YOU GO RIGHT ONE STEP!     ");
                 wrefresh(_tmp_wInput);
                 break;
 
-            case _KEY_MBP_LEFT:
+            case KEY_LEFT:
                 mvwprintw(_tmp_wInput, 4, 4, "YOU GO LEFT ONE STEP!      ");
                 wrefresh(_tmp_wInput);
                 break;
