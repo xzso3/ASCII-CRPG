@@ -1,6 +1,6 @@
 #ifndef SCENARIO_H
 #define SCENARIO_H
-
+#include "curses.h"
 /*
  *    ASCII CAVG - Scenario Header
  *
@@ -28,21 +28,22 @@
  * 
  * 
  */
-
+#define SPC 0x20
 /* System Functions */
-int _sys_initialize(int* _G_SYS_RES_Y, int* _G_SYS_RES_X);
-int _sys_showScenario(int scenarioType, int _G_SYS_RES_Y, int _G_SYS_RES_X);
-int _sys_mainScenario();
-int _sys_canvasPrint(char** canvas);
+int 	_sys_initialize(int*, int* );
+int 	_sys_showScenario(int, int, int);
+int 	_sys_mainScenario();
+int 	_sys_canvasPrint(WINDOW*, char**);
 
 /* Scenario Functions */
-int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X);
-int _scene_titleStart();
-int _scene_titleLoad();
-int _scene_titleExit(int _G_SYS_RES_Y, int _G_SYS_RES_X);
-int _scene_controller(int chapterNumber, int chapterProgress);
-int _scene_chapterTitleDisplay(int chapterNumber);
-int _scene_chapterContentDisplay(int chapterNumber, int chapterProgress);
+int 	_scene_titleMenu(int, int);
+int 	_scene_titleStart();
+int 	_scene_titleLoad();
+int 	_scene_titleExit(int, int);
+int 	_scene_controller(int, int);
+int 	_scene_chapterTitleDisplay(int);
+int 	_scene_chapterDialogueDisplay(WINDOW*, int, int);
+
 
 /*
 	ONE CHARPTER CHARTFLOW

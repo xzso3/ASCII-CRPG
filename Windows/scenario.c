@@ -4,6 +4,7 @@
 #include "scenario.h"
 //#include <ncurses.h>            // Library ncurses (For Unix-like OS)
 #include "curses.h"           // Library PDcurses (For Windows OS)
+#include "io.h"
 
 /*
  *    ASCII CAVG - Scenario Program Entrance
@@ -108,7 +109,7 @@ int _sys_mainScenario(){
     int i;
     for(i=0; i<7; i++){
         mvwprintw(stdscr, i+3, 4, titleASCII[i]);
-        wrefresh(stdscr);
+        refresh();
         clock_t curTime = clock();
         while (clock() < curTime + 150);
     }
@@ -126,12 +127,12 @@ int _sys_mainScenario(){
     }
 
     //mvwaddwstr(stdscr, 8, 5, tmp);
-    wrefresh(stdscr);    
+    refresh();    
     
     return FUNC_RETURN_VALUE;
 }
 
-int _sys_canvasPrint(char** canvas){
+int _sys_canvasPrint(WINDOW* printWindow, char** canvas){
     int FUNC_RETURN_VALUE = 0x01;
 
 
@@ -150,13 +151,13 @@ int _sys_sleep(int sleepTime){
     return FUNC_RETURN_VALUE;
 }
 
+
 /// <Summary>
 /// Scenario Function
 /// </Summary>
 
 int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
-    int SPC = 0x20;
     int keySelection, hlSelection = 0; // hl means highlighted
     wchar_t* menuSelection[3] = {L"开 始 游 戏 ", L"读 取 游 戏 ", L"退 出 游 戏 "};
     
@@ -210,6 +211,8 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
         case 0:
             mvwprintw(titleSelector, 0, 2, "  GAME Loading ... ");
             wrefresh(titleSelector);
+            _sys_sleep(1000);
+            delwin(titleSelector);
             _scene_titleStart();
             break;
 
@@ -227,16 +230,17 @@ int _scene_titleMenu(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     return FUNC_RETURN_VALUE;
 }
 
+// start game from the beginning
 int _scene_titleStart(){
     int FUNC_RETURN_VALUE = 0x01;
     clear();
-    _sys_sleep(1000);
-    wrefresh(stdscr);
+    refresh();
     _sys_sleep(1000);
     _scene_controller(0, 0); // Start from the begining.
     return FUNC_RETURN_VALUE;
 }
 
+// continue game from last save files
 int _scene_titleLoad(){
     int FUNC_RETURN_VALUE = 0x01;
     clear();
@@ -245,24 +249,53 @@ int _scene_titleLoad(){
     return FUNC_RETURN_VALUE;
 }
 
+// exit game
 int _scene_titleExit(int _G_SYS_RES_Y, int _G_SYS_RES_X){
     int FUNC_RETURN_VALUE = 0x01;
     char* caption = "Exiting...";
     clear();
     mvwprintw(stdscr, _G_SYS_RES_Y/2, (_G_SYS_RES_X - strlen(caption)) / 2, caption);
-    clock_t curTime = clock();
-    while (clock() < curTime + 1500) wrefresh(stdscr);
+    _sys_sleep(1500);
+    refresh();
     endwin();
     return FUNC_RETURN_VALUE;
 }
 
+// scenario progress controller
 int _scene_controller(int chapterNumber, int chapterProgress){
+    // initialize function
     int FUNC_RETURN_VALUE = 0x01;
-    _scene_chapterTitleDisplay(0);
+    int chapterProgAmount[7] = {_io_getChapterLen(1), _io_getChapterLen(2), 93, 166, 150, 167, 49};
+    int curProg = chapterProgress; 
+
+    move(0, 0);
+    printw("%d %d", chapterProgAmount[0], chapterProgAmount[1]);
+
+    WINDOW* dialogueWindow = newwin(8, _G_resX, _G_resY-8, 0);
+    refresh();
+
+    while(chapterNumber < 7){
+        while(curProg < chapterProgAmount[chapterNumber]){
+            if(curProg == 0){
+                _scene_chapterTitleDisplay(chapterNumber);
+                // initialize dialogue window
+            }else{
+                _scene_chapterDialogueDisplay(dialogueWindow, chapterNumber, curProg);
+                getch();
+
+            }
+
+            curProg++;
+        }
+
+        chapterNumber++;
+    }
+
 
     return FUNC_RETURN_VALUE;
 }
 
+// chapter title animations
 int _scene_chapterTitleDisplay(int chapterNumber){
     int FUNC_RETURN_VALUE = 0x01;
 
@@ -273,26 +306,33 @@ int _scene_chapterTitleDisplay(int chapterNumber){
     addnwstr(L"第", 1);
     printw(" %c ", chapterNumber + 49);
     addnwstr(L"章", 1);
-    wrefresh(stdscr);
+    refresh();
     _sys_sleep(1500);
     int i = chapterNumber;
     while(chapterTitle[i] != L'|'){
         move(_G_resY / 2, 5 + i * 2);
         addnwstr(chapterTitle + startPos[chapterNumber] + i, 1);
-        wrefresh(stdscr);
-        clock_t curTime = clock();
-        while (clock() < curTime + 500);
+        refresh();
+        _sys_sleep(500);
         i++;
     }
-
-    getch();
-    endwin();
+    _sys_sleep(1500);
+    clear();
+    refresh();
     return FUNC_RETURN_VALUE;
 }
 
-int _scene_chapterContentDisplay(int chapterNumber, int chapterProgress){
+// diagloue
+int _scene_chapterDialogueDisplay(WINDOW* dialogueWindow, int chapterNumber, int chapterProgress){
     int FUNC_RETURN_VALUE = 0x01;
 
+    box(dialogueWindow, SPC, SPC);
+    wborder(dialogueWindow, SPC, SPC, SPC, SPC, SPC, SPC, SPC, SPC);
+    wbkgd(dialogueWindow, COLOR_PAIR(2));
+    keypad(dialogueWindow, 1);
+    refresh();
+    wgetch(dialogueWindow);
+    mvwprintw(dialogueWindow, 1, 1, "%d", chapterProgress);
 
     return FUNC_RETURN_VALUE;
 }

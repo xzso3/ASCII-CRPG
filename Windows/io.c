@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <wchar.h>
 #include "io.h"
 
@@ -29,3 +30,49 @@
  * 
  * 
  */
+
+dNode* head ;
+dNode* t;
+int chapterLen[2];
+
+void _io_addDNode(int inputChapterNo, int inputDialogueNo, wchar_t* inputContent){
+	t->chapterNo = inputChapterNo;
+	t->dialogueNo = inputDialogueNo;
+	wcscpy(t->dialogueContent, inputContent);
+	t->pNext = malloc(sizeof(dNode));
+	t = t->pNext;
+	t->pNext = NULL;
+}
+
+void _io_initializeScript(){
+	FILE* fStream;
+	wchar_t line[513];
+	if(_wfopen_s(&fStream, L"data\\scripts\\main.tss", L"r") == 0){
+
+		chapterLen[0] = 0;
+		chapterLen[1] = 0;
+		int chapter = 1;
+		head = malloc(sizeof(dNode));
+		head->pNext = NULL;
+		t = head;
+		while(fgetws(line, 256, fStream) != NULL)
+		{
+			if(wcscmp(line, L"#SCENE\n") != 0){
+				chapterLen[chapter - 1]++;
+				_io_addDNode(chapter, chapterLen[chapter - 1], line);
+			}else{
+				chapter++;
+			}
+			
+		}
+		
+	}
+}
+
+int _io_getChapterLen(int chapterNo){
+	return chapterLen[chapterNo - 1];
+}
+
+dNode* _io_getHeadNodePtr(){
+	return head;
+}

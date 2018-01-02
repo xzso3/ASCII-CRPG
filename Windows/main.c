@@ -44,6 +44,7 @@ int main(){
     // Display the menu scenario.
     int _sys_resY, _sys_resX;
     _sys_initialize(&_sys_resY, &_sys_resX);
+    _io_initializeScript();
     _sys_showScenario(0, _sys_resY, _sys_resX);
     _sys_showScenario(1, _sys_resY, _sys_resX);
 

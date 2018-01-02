@@ -1,6 +1,7 @@
 #ifndef IO_H
 #define IO_H
 #include <stdio.h>
+#include <wchar.h>
 
 /*
  *    ASCII CAVG - IO Header
@@ -29,5 +30,16 @@
  * 
  * 
  */
+typedef struct dialCData{
+	int chapterNo;
+	int dialogueNo;
+	wchar_t dialogueContent[513];
+	struct dialCData* pNext;
+}dNode;
+
+void _io_addDNode(int, int, wchar_t*);
+void _io_getDialogueScript();
+int _io_getChapterLen(int); 
+dNode* _io_getHeadNodePtr();
 
 #endif
