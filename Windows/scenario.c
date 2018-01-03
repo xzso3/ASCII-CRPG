@@ -268,8 +268,6 @@ int _scene_controller(int chapterNumber, int chapterProgress){
     int chapterProgAmount[7] = {_io_getChapterLen(1), _io_getChapterLen(2), 93, 166, 150, 167, 49};
     int curProg = chapterProgress; 
 
-    move(0, 0);
-    printw("%d %d", chapterProgAmount[0], chapterProgAmount[1]);
 
     WINDOW* dialogueWindow = newwin(8, _G_resX, _G_resY-8, 0);
     refresh();
@@ -281,7 +279,6 @@ int _scene_controller(int chapterNumber, int chapterProgress){
                 // initialize dialogue window
             }else{
                 _scene_chapterDialogueDisplay(dialogueWindow, chapterNumber, curProg);
-                getch();
 
             }
 
@@ -331,8 +328,25 @@ int _scene_chapterDialogueDisplay(WINDOW* dialogueWindow, int chapterNumber, int
     wbkgd(dialogueWindow, COLOR_PAIR(2));
     keypad(dialogueWindow, 1);
     refresh();
+    
+    mvwprintw(dialogueWindow, 1, 2, "[DEBUG MODE]Dial Prog: %d", chapterProgress);
+
+    
+    wchar_t* curDialogueContent = L"这 是 一 段 临 时 测 试 的 对 话 本 文";
+    int i, dLen = wcslen(curDialogueContent);
+
+    for(i = 0; i < dLen; i++){
+
+        mvwaddnwstr(dialogueWindow, 2, i+2, curDialogueContent + i, 1);
+        refresh();
+        wrefresh(dialogueWindow);
+        _sys_sleep(50);
+    }
+
     wgetch(dialogueWindow);
-    mvwprintw(dialogueWindow, 1, 1, "%d", chapterProgress);
+    wclear(dialogueWindow);
+    wrefresh(dialogueWindow);
+    refresh();
 
     return FUNC_RETURN_VALUE;
 }

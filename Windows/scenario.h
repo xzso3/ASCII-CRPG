@@ -44,16 +44,6 @@ int 	_scene_controller(int, int);
 int 	_scene_chapterTitleDisplay(int);
 int 	_scene_chapterDialogueDisplay(WINDOW*, int, int);
 
-
-/*
-	ONE CHARPTER CHARTFLOW
-
-	SHOW THE CHAPTER TITLE
-	>>
-	PLAY THE CONTENT
-*/
-
-
 /* Temporary Functions */
 int _tmp_testCursesInit();
 

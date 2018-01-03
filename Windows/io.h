@@ -39,7 +39,13 @@ typedef struct dialCData{
 
 void _io_addDNode(int, int, wchar_t*);
 void _io_getDialogueScript();
+void _io_initializeScript();
+void _io_initializeConvertToArray();
+
 int _io_getChapterLen(int); 
+
 dNode* _io_getHeadNodePtr();
+
+wchar_t* _io_getDialogueContent(int, int);
 
 #endif

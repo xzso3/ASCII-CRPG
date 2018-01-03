@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include "curses.h"
 #include "io.h"
 
 /*
- *    ASCII CAVG - IO Header
+ *    ASCII CAVG - IO
  *
  *    Current Version : For Windows    
  *
@@ -33,12 +34,14 @@
 
 dNode* head ;
 dNode* t;
+wchar_t dialogueList[8][128][513];
 int chapterLen[2];
 
 void _io_addDNode(int inputChapterNo, int inputDialogueNo, wchar_t* inputContent){
 	t->chapterNo = inputChapterNo;
 	t->dialogueNo = inputDialogueNo;
 	wcscpy(t->dialogueContent, inputContent);
+	//addnwstr(inputContent, 1);
 	t->pNext = malloc(sizeof(dNode));
 	t = t->pNext;
 	t->pNext = NULL;
@@ -51,7 +54,7 @@ void _io_initializeScript(){
 
 		chapterLen[0] = 0;
 		chapterLen[1] = 0;
-		int chapter = 1;
+		int chapter = 0;
 		head = malloc(sizeof(dNode));
 		head->pNext = NULL;
 		t = head;
@@ -67,6 +70,24 @@ void _io_initializeScript(){
 		}
 		
 	}
+	_io_initializeConvertToArray();
+}
+
+void _io_initializeConvertToArray(){
+	dNode* curNode = head;
+	/*
+	while(curNode != NULL){
+		//if(curNode->dialogueContent == NULL)
+			//break;
+		//addwstr(curNode->dialogueContent);
+		//printw("%d, %d", curNode->chapterNo, curNode->dialogueNo);
+		//wcscpy(dialogueList[curNode->chapterNo-1][curNode->dialogueNo-1], curNode->dialogueContent);
+		//curNode = curNode->pNext;
+	}*/
+}
+
+wchar_t* _io_getDialogueContent(int chapterNo, int dialogueNo){
+	return dialogueList[chapterNo][dialogueNo]; 
 }
 
 int _io_getChapterLen(int chapterNo){
